@@ -671,8 +671,8 @@ public class MainWindow extends javax.swing.JFrame implements Cloneable{
             return;
         }
         
-        ModifiedSchedule.getTimes().remove(row);
-        buildTimesTable(ModifiedSchedule.getTimes());
+        currentSchedule.getTimes().remove(row);
+        buildTimesTable(currentSchedule.getTimes());
         
         schedules_button_addTime.setEnabled(true);
         schedules_button_editTime.setEnabled(false);
@@ -702,7 +702,7 @@ public class MainWindow extends javax.swing.JFrame implements Cloneable{
         // TODO add your handling code here:        
                 ArrayList<DoorTime> times = new ArrayList<DoorTime>(currentSchedule.getTimes());
                 
-                int len = times.size();
+                int len = currentSchedule.getTimes().size();
                 int row = schedules_table_times.getSelectedRow();
                 DefaultTableModel model = (DefaultTableModel)schedules_table_times.getModel();
                 String name = (String) model.getValueAt(row,0);
@@ -753,7 +753,6 @@ public class MainWindow extends javax.swing.JFrame implements Cloneable{
                 schedules_button_addTime.setEnabled(true);
                 schedules_button_editTime.setEnabled(true);
                 schedules_button_deleteTime.setEnabled(true);
-                buildTimesTable(ModifiedSchedule.getTimes());
                 
     }//GEN-LAST:event_schedules_button_editTimeActionPerformed
 
@@ -763,7 +762,7 @@ public class MainWindow extends javax.swing.JFrame implements Cloneable{
         String Description = schedules_textArea_description.getText();
         Color color = schedules_label_colorDisplay.getBackground();
         
-        if (schedules.containsKey(name)){
+        if (schedules.containsKey(name) && EditMode == false){
             int confirmation = JOptionPane.showConfirmDialog(null, "CONFIRM: Replace " + name + " schedule?");
             if (confirmation == JOptionPane.YES_OPTION) {
                 schedules.remove(name);
