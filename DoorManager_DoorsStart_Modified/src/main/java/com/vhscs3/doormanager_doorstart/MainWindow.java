@@ -37,6 +37,7 @@ public class MainWindow extends javax.swing.JFrame {
     private Schedule                    currentSchedule;   // Used to get values for editing and adding new schedule 
     private ArrayList<DoorTime>         editedTimes;       // Serves as a temp variable for when schedule times are edited 
     private int                         editedTimeRow;
+    private Door currentDoor;
     public MainWindow() {
         
         DataFactory df = new DataFactory();
@@ -53,6 +54,7 @@ public class MainWindow extends javax.swing.JFrame {
         buildDoorsGroup();
         
         buildSchedulesTable();
+        doorBuildSchedulesTable();
         
         // Set the Configuration for buttons (enabled/disabled) for program start
         setGroupEnabled(false, schedulesGroup);
@@ -84,6 +86,14 @@ public class MainWindow extends javax.swing.JFrame {
         schedules_comboBox_closeHour = new javax.swing.JComboBox<>();
         schedules_comboBox_openMinute = new javax.swing.JComboBox<>();
         doors_buttonGroup_building = new javax.swing.ButtonGroup();
+        doors_dialog_location = new javax.swing.JDialog();
+        doors_comboBox_Xselector = new javax.swing.JComboBox<>();
+        doors_label_x = new javax.swing.JLabel();
+        doors_label_y = new javax.swing.JLabel();
+        doors_button_locationSave = new javax.swing.JButton();
+        doors_button_locationCancel = new javax.swing.JButton();
+        doors_label_locationInstractions = new javax.swing.JLabel();
+        doors_comboBox_Yselector = new javax.swing.JComboBox<>();
         tabbedPane = new javax.swing.JTabbedPane();
         dashBoard_tabbedPane = new javax.swing.JPanel();
         doors_tabbedPane = new javax.swing.JPanel();
@@ -235,6 +245,81 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
+        doors_dialog_location.setMinimumSize(new java.awt.Dimension(400, 300));
+        doors_dialog_location.setModal(true);
+        doors_dialog_location.setResizable(false);
+
+        doors_comboBox_Xselector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "0" }));
+
+        doors_label_x.setText("X:");
+
+        doors_label_y.setText("Y:");
+
+        doors_button_locationSave.setText("Save");
+        doors_button_locationSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doors_button_locationSaveActionPerformed(evt);
+            }
+        });
+
+        doors_button_locationCancel.setText("Cancel");
+        doors_button_locationCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doors_button_locationCancelActionPerformed(evt);
+            }
+        });
+
+        doors_label_locationInstractions.setText("Select X and Y of your door.");
+
+        doors_comboBox_Yselector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "0" }));
+
+        javax.swing.GroupLayout doors_dialog_locationLayout = new javax.swing.GroupLayout(doors_dialog_location.getContentPane());
+        doors_dialog_location.getContentPane().setLayout(doors_dialog_locationLayout);
+        doors_dialog_locationLayout.setHorizontalGroup(
+            doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(doors_dialog_locationLayout.createSequentialGroup()
+                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(doors_label_y)
+                            .addComponent(doors_label_x))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(doors_comboBox_Xselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(doors_comboBox_Yselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(39, 39, 39))
+                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(doors_button_locationSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(doors_button_locationCancel))
+                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(doors_label_locationInstractions)
+                        .addGap(0, 30, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        doors_dialog_locationLayout.setVerticalGroup(
+            doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(doors_dialog_locationLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(doors_label_locationInstractions)
+                .addGap(18, 18, 18)
+                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(doors_comboBox_Xselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(doors_label_x))
+                .addGap(18, 18, 18)
+                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(doors_comboBox_Yselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(doors_label_y))
+                .addGap(28, 28, 28)
+                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(doors_button_locationSave)
+                    .addComponent(doors_button_locationCancel))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabbedPane.setBackground(java.awt.SystemColor.control);
@@ -257,11 +342,11 @@ public class MainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Description", "Color", "Schedule", "Building"
+                "Name", "Location", "Logs", "Weekly Schedules", "Status", "Building"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true
+                false, false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -269,6 +354,11 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         doors_table_display.setColumnSelectionAllowed(true);
+        doors_table_display.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MouseClicked_doors_table(evt);
+            }
+        });
         doors_scrollPane_display.setViewportView(doors_table_display);
         doors_table_display.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -1097,6 +1187,33 @@ public class MainWindow extends javax.swing.JFrame {
                
     }//GEN-LAST:event_schedules_button_deleteTimeActionPerformed
 
+    private void doors_button_locationSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_locationSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_doors_button_locationSaveActionPerformed
+
+    private void doors_button_locationCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_locationCancelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_doors_button_locationCancelActionPerformed
+
+    private void MouseClicked_doors_table(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MouseClicked_doors_table
+        if (doors_button_cancel.isEnabled()) {
+            return;
+        }
+        
+        int row = doors_table_display.getSelectedRow();
+        
+        String name  = (String) doors_table_display.getValueAt(row, 0);
+        Door door = doors.get(name);
+        
+        currentDoor = door;
+        
+        schedules_textField_name.setText(name);
+        //schedules_textArea_description.setText(schedule.getDescription());
+        //TODO figure something out about location and shcedules
+        //schedules_label_colorDisplay.setBackground(schedule.getColor());
+        schedules_label_colorDisplay.setOpaque(true);
+    }//GEN-LAST:event_MouseClicked_doors_table
+
     /**
      * @param args the command line arguments
      */
@@ -1140,7 +1257,11 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton doors_button_cancel;
     private javax.swing.JButton doors_button_edit;
     private javax.swing.JButton doors_button_location;
+    private javax.swing.JButton doors_button_locationCancel;
+    private javax.swing.JButton doors_button_locationSave;
     private javax.swing.JButton doors_button_save;
+    private javax.swing.JComboBox<String> doors_comboBox_Xselector;
+    private javax.swing.JComboBox<String> doors_comboBox_Yselector;
     private javax.swing.JComboBox<String> doors_comboBox_friday;
     private javax.swing.JComboBox<String> doors_comboBox_monday1;
     private javax.swing.JComboBox<String> doors_comboBox_saturday;
@@ -1148,8 +1269,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> doors_comboBox_thursday;
     private javax.swing.JComboBox<String> doors_comboBox_tuesday;
     private javax.swing.JComboBox<String> doors_comboBox_wednesday;
+    private javax.swing.JDialog doors_dialog_location;
     private javax.swing.JLabel doors_label_building;
     private javax.swing.JLabel doors_label_location;
+    private javax.swing.JLabel doors_label_locationInstractions;
     private javax.swing.JLabel doors_label_log;
     private javax.swing.JLabel doors_label_monday;
     private javax.swing.JLabel doors_label_name;
@@ -1161,6 +1284,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel doors_label_thursday;
     private javax.swing.JLabel doors_label_tuesday;
     private javax.swing.JLabel doors_label_wednesday;
+    private javax.swing.JLabel doors_label_x;
+    private javax.swing.JLabel doors_label_y;
     private javax.swing.JLabel doors_lable_friday;
     private javax.swing.JPanel doors_panel_crudButtons;
     private javax.swing.JPanel doors_panel_elements;
@@ -1296,6 +1421,34 @@ public class MainWindow extends javax.swing.JFrame {
             //cell.setBackground(schedule.getColor());
         }
        */ 
+
+    }
+    private void doorBuildSchedulesTable() {
+        
+        Object[][] data = new Object[doors.size()][6];
+        String[] columnHeaders = {"Name", "Location", "Logs", "Weekly Schedules", "Status", "Building"};
+        
+        int row = 0;
+        
+        for (String key : doors.keySet()) {
+            Door door = doors.get(key);
+            
+            data[row][0] = door.getName();
+            data[row][1] = door.getLocation();
+            data[row][2] = door.getLog();
+            data[row][3] = door.getWeeklySchedules();
+            data[row][4] = door.isStatus();
+            data[row][5] = door.getBuilding();
+            
+            row++;
+            
+        }
+        
+        DefaultTableModel dfm2 = (DefaultTableModel)doors_table_display.getModel();
+        dfm2.setDataVector(data, columnHeaders);
+        
+        CellColorRenderer cellRenderer = new CellColorRenderer();
+        doors_table_display.setDefaultRenderer(Object.class, cellRenderer); //Error here
 
     }
     
