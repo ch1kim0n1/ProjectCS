@@ -4,7 +4,11 @@
  */
 package com.vhscs3.doormanager_doorstart;
 
+import java.awt.Color;
 import java.io.Serializable;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -73,6 +77,26 @@ public class Door implements Serializable{
 
     public void setWeeklySchedules(Schedule[] weeklySchedules) {
         this.weeklySchedules = weeklySchedules;
+    }
+    public Schedule getToday()
+    {
+        LocalDate localDate = LocalDate.now();
+        DayOfWeek dayWeek = localDate.getDayOfWeek();
+        int dayOfWeek = dayWeek.getValue()-1;
+        return weeklySchedules[dayOfWeek];
+    }
+    public Schedule getScheduleOfDay(int day)
+    {
+        return weeklySchedules[day];
+    }
+    public ArrayList<DoorTime> getTimes(){
+        
+        return getToday().getTimes();
+        
+    }
+    public Color getColor() {
+
+        return getToday().getColor();
     }
     
 

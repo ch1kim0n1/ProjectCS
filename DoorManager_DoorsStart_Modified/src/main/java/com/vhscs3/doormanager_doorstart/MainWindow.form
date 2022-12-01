@@ -604,22 +604,16 @@
                 <Component class="javax.swing.JTable" name="doors_table_display">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="6" rowCount="0">
-                        <Column editable="false" title="Name" type="java.lang.Object"/>
-                        <Column editable="false" title="Location" type="java.lang.Object"/>
-                        <Column editable="false" title="Logs" type="java.lang.Object"/>
-                        <Column editable="false" title="Weekly Schedules" type="java.lang.Object"/>
-                        <Column editable="true" title="Status" type="java.lang.Object"/>
+                      <Table columnCount="5" rowCount="0">
+                        <Column editable="false" title="Name " type="java.lang.Object"/>
+                        <Column editable="false" title="Status" type="java.lang.Object"/>
+                        <Column editable="false" title="Color" type="java.lang.Object"/>
+                        <Column editable="false" title="Schedule" type="java.lang.Object"/>
                         <Column editable="false" title="Building" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="1">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>
@@ -668,7 +662,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="doors_button_edit" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="doors_butto_delete" min="-2" max="-2" attributes="0"/>
+                          <Component id="doors_button_delete" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="doors_button_cancel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="61" max="32767" attributes="0"/>
@@ -683,7 +677,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="doors_button_add" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="doors_button_edit" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="doors_butto_delete" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="doors_button_delete" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="doors_button_save" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="doors_button_cancel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -703,7 +697,7 @@
                     <Property name="text" type="java.lang.String" value="Edit"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JButton" name="doors_butto_delete">
+                <Component class="javax.swing.JButton" name="doors_button_delete">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Delete"/>
                   </Properties>
@@ -804,7 +798,7 @@
                                           <Component id="doors_label_wednesday" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="doors_comboBox_monday1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="doors_comboBox_monday" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="doors_label_monday" min="-2" max="-2" attributes="0"/>
                                       </Group>
@@ -868,7 +862,7 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="doors_label_schedules" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="doors_comboBox_monday1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="doors_comboBox_monday" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="doors_label_monday" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -968,7 +962,7 @@
                     <Property name="text" type="java.lang.String" value="Schedules"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JComboBox" name="doors_comboBox_monday1">
+                <Component class="javax.swing.JComboBox" name="doors_comboBox_monday">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="7">
