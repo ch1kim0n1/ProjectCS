@@ -7,6 +7,7 @@ package com.vhscs3.doormanager_doorstart;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
+
 /**
  *
  * @author irad_Allen

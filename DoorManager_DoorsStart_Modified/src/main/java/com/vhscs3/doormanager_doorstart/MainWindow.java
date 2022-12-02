@@ -38,9 +38,9 @@ public class MainWindow extends javax.swing.JFrame {
     private JComponent[]                schedulesGroup;    // Array of enabled/disabled form elements on the schedules tabbed pane
     private JComponent[]                doorsGroup;        // Array of enabled/disabled form elements on the doors tabbed pane
     private Schedule                    currentSchedule;   // Used to get values for editing and adding new schedule 
+    private Door                        currentDoor;  
     private ArrayList<DoorTime>         editedTimes;       // Serves as a temp variable for when schedule times are edited 
     private int                         editedTimeRow;
-    private Door currentDoor;
     public MainWindow() {
         
         DataFactory df = new DataFactory();
@@ -55,18 +55,17 @@ public class MainWindow extends javax.swing.JFrame {
         
         buildSchedulesGroup();
         buildDoorsGroup();
-        
         buildSchedulesTable();
         buildDoorsTable();
-        
         // Set the Configuration for buttons (enabled/disabled) for program start
         setGroupEnabled(false, schedulesGroup);
+        setGroupEnabled(false, doorsGroup);
+
         schedules_button_add.setEnabled(true);
         
         schedules_panel_elements.setVisible(false);
         
         //setGroupEnabled(false, doorsGroup);
-               
     }
 
     /**
@@ -89,14 +88,6 @@ public class MainWindow extends javax.swing.JFrame {
         schedules_comboBox_closeHour = new javax.swing.JComboBox<>();
         schedules_comboBox_openMinute = new javax.swing.JComboBox<>();
         doors_buttonGroup_building = new javax.swing.ButtonGroup();
-        doors_dialog_location = new javax.swing.JDialog();
-        doors_comboBox_Xselector = new javax.swing.JComboBox<>();
-        doors_label_x = new javax.swing.JLabel();
-        doors_label_y = new javax.swing.JLabel();
-        doors_button_locationSave = new javax.swing.JButton();
-        doors_button_locationCancel = new javax.swing.JButton();
-        doors_label_locationInstractions = new javax.swing.JLabel();
-        doors_comboBox_Yselector = new javax.swing.JComboBox<>();
         tabbedPane = new javax.swing.JTabbedPane();
         dashBoard_tabbedPane = new javax.swing.JPanel();
         doors_tabbedPane = new javax.swing.JPanel();
@@ -248,81 +239,6 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        doors_dialog_location.setMinimumSize(new java.awt.Dimension(400, 300));
-        doors_dialog_location.setModal(true);
-        doors_dialog_location.setResizable(false);
-
-        doors_comboBox_Xselector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "0" }));
-
-        doors_label_x.setText("X:");
-
-        doors_label_y.setText("Y:");
-
-        doors_button_locationSave.setText("Save");
-        doors_button_locationSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doors_button_locationSaveActionPerformed(evt);
-            }
-        });
-
-        doors_button_locationCancel.setText("Cancel");
-        doors_button_locationCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doors_button_locationCancelActionPerformed(evt);
-            }
-        });
-
-        doors_label_locationInstractions.setText("Select X and Y of your door.");
-
-        doors_comboBox_Yselector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "0" }));
-
-        javax.swing.GroupLayout doors_dialog_locationLayout = new javax.swing.GroupLayout(doors_dialog_location.getContentPane());
-        doors_dialog_location.getContentPane().setLayout(doors_dialog_locationLayout);
-        doors_dialog_locationLayout.setHorizontalGroup(
-            doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(doors_dialog_locationLayout.createSequentialGroup()
-                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(doors_label_y)
-                            .addComponent(doors_label_x))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(doors_comboBox_Xselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(doors_comboBox_Yselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39))
-                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(doors_button_locationSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(doors_button_locationCancel))
-                    .addGroup(doors_dialog_locationLayout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(doors_label_locationInstractions)
-                        .addGap(0, 30, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        doors_dialog_locationLayout.setVerticalGroup(
-            doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(doors_dialog_locationLayout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(doors_label_locationInstractions)
-                .addGap(18, 18, 18)
-                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(doors_comboBox_Xselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(doors_label_x))
-                .addGap(18, 18, 18)
-                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(doors_comboBox_Yselector, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(doors_label_y))
-                .addGap(28, 28, 28)
-                .addGroup(doors_dialog_locationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(doors_button_locationSave)
-                    .addComponent(doors_button_locationCancel))
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabbedPane.setBackground(java.awt.SystemColor.control);
@@ -345,7 +261,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name ", "Status", "Color", "Schedule", "Building"
+                "Name", "status", "Color", "Schedule", "Building"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -359,19 +275,29 @@ public class MainWindow extends javax.swing.JFrame {
         doors_table_display.setColumnSelectionAllowed(true);
         doors_table_display.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                MouseClicked_doors_table(evt);
+                doors_table_displayMouseClicked(evt);
             }
         });
         doors_scrollPane_display.setViewportView(doors_table_display);
         doors_table_display.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         doors_button_add.setText("Add");
+        doors_button_add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doors_button_addActionPerformed(evt);
+            }
+        });
 
         doors_button_edit.setText("Edit");
 
         doors_button_delete.setText("Delete");
 
         doors_button_save.setText("Save");
+        doors_button_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                doors_button_saveActionPerformed(evt);
+            }
+        });
 
         doors_button_cancel.setText("Cancel");
 
@@ -927,6 +853,14 @@ public class MainWindow extends javax.swing.JFrame {
         int row = schedules_table_display.getSelectedRow();
         
         String name  = (String) schedules_table_display.getValueAt(row, 0);
+        if(name.equals("NONE"))
+        {
+           schedules_button_edit.setEnabled(false);
+           schedules_button_delete.setEnabled(false);
+           return; 
+
+        }
+        
         Schedule schedule = schedules.get(name);
         
         currentSchedule = schedule;
@@ -1190,15 +1124,7 @@ public class MainWindow extends javax.swing.JFrame {
                
     }//GEN-LAST:event_schedules_button_deleteTimeActionPerformed
 
-    private void doors_button_locationSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_locationSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_doors_button_locationSaveActionPerformed
-
-    private void doors_button_locationCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_locationCancelActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_doors_button_locationCancelActionPerformed
-
-    private void MouseClicked_doors_table(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MouseClicked_doors_table
+    private void doors_table_displayMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doors_table_displayMouseClicked
         if (doors_button_cancel.isEnabled()) {
             return;
         }
@@ -1206,13 +1132,19 @@ public class MainWindow extends javax.swing.JFrame {
         int row = doors_table_display.getSelectedRow();
         
         String name  = (String) doors_table_display.getValueAt(row, 0);
-        System.out.println(name + "\n\n");
         Door door = doors.get(name);
         
         currentDoor = door;
         
         doors_textField_name.setText(name);
-        doors_label_statusState.setText(""+door.isStatus());
+        if(((String)doors_table_display.getValueAt(row, 2)).equals("true")){
+            doors_label_statusState.setText("OPEN");
+        }
+        else{
+            doors_label_statusState.setText("CLOSE");
+ 
+        }
+            
         int buildingNum = Integer.parseInt((String)doors_table_display.getValueAt(row, 4));
         if(buildingNum == 1)
         {
@@ -1225,25 +1157,67 @@ public class MainWindow extends javax.swing.JFrame {
         else if(buildingNum == 3)
         {
             doors_radioButton_b3.setSelected(true);
+        } 
+        
+        if(!(doors_comboBox_monday.getSelectedItem().equals(door.getScheduleOfDay(0).getName()))){
+            for(int monday = 0; monday < doors_comboBox_monday.getItemCount(); monday++) {
+                    if(doors_comboBox_monday.getItemAt(monday).equals(door.getScheduleOfDay(0).getName())){
+                        doors_comboBox_monday.setSelectedItem(door.getScheduleOfDay(0).getName());
+                    }
+                }
         }
-        while(doors_comboBox_monday.getSelectedIndex() == 0 || 
-              doors_comboBox_tuesday.getSelectedIndex() == 0 ||                                   
-              doors_comboBox_wednesday.getSelectedIndex() != 0 ||
-              doors_comboBox_thursday.getSelectedIndex() != 0 ||
-              doors_comboBox_friday.getSelectedIndex() != 0 ||
-              doors_comboBox_saturday.getSelectedIndex() != 0 ||
-              doors_comboBox_sunday.getSelectedIndex() != 0 )
-        { 
-           // for(int i = 0; i <= 6; i++) {
-            //    for(int i2 = 0) {
-                    
-                    
-            //    }
-                
-           // }
-            
-            
+        if(!(doors_comboBox_tuesday.getSelectedItem().equals(door.getScheduleOfDay(1).getName()))){
+
+            for(int tuesday = 0; tuesday < doors_comboBox_tuesday.getItemCount(); tuesday++) {
+                    if(doors_comboBox_tuesday.getItemAt(tuesday).equals(door.getScheduleOfDay(1).getName())){
+                        doors_comboBox_tuesday.setSelectedItem(door.getScheduleOfDay(1).getName());
+                    }
+                }
         }
+        if(!(doors_comboBox_wednesday.getSelectedItem().equals(door.getScheduleOfDay(2).getName()))){
+
+            for(int wednesday = 0; wednesday < doors_comboBox_wednesday.getItemCount(); wednesday++) {
+                if(doors_comboBox_wednesday.getItemAt(wednesday).equals(door.getScheduleOfDay(2).getName())){
+                        doors_comboBox_wednesday.setSelectedItem(door.getScheduleOfDay(2).getName());
+                }
+            }
+        }
+        if(!(doors_comboBox_thursday.getSelectedItem().equals(door.getScheduleOfDay(3).getName()))){
+
+            for(int thursday = 0; thursday < doors_comboBox_thursday.getItemCount(); thursday++) {
+                if(doors_comboBox_thursday.getItemAt(thursday).equals(door.getScheduleOfDay(3).getName())){
+                    doors_comboBox_thursday.setSelectedItem(door.getScheduleOfDay(3).getName());
+                }
+            }
+        }
+        if(!(doors_comboBox_friday.getSelectedItem().equals(door.getScheduleOfDay(4).getName()))){
+        
+            for(int friday = 0; friday < doors_comboBox_friday.getItemCount(); friday++) {
+                if(doors_comboBox_friday.getItemAt(friday).equals(door.getScheduleOfDay(4).getName())){
+                    doors_comboBox_friday.setSelectedItem(door.getScheduleOfDay(4).getName());
+                }
+            }
+        }
+        if(!(doors_comboBox_saturday.getSelectedItem().equals(door.getScheduleOfDay(5).getName()))){
+        
+            for(int saturday = 0; saturday < doors_comboBox_saturday.getItemCount(); saturday++) {
+                if(doors_comboBox_saturday.getItemAt(saturday).equals(door.getScheduleOfDay(5).getName())){
+                    doors_comboBox_saturday.setSelectedItem(door.getScheduleOfDay(5).getName());
+                }
+            }
+        }
+        if(!(doors_comboBox_sunday.getSelectedItem().equals(door.getScheduleOfDay(6).getName()))){
+
+            for(int sunday = 0; sunday < doors_comboBox_sunday.getItemCount(); sunday++) {
+                if(doors_comboBox_sunday.getItemAt(sunday).equals(door.getScheduleOfDay(6).getName())){
+                    doors_comboBox_sunday.setSelectedItem(door.getScheduleOfDay(6).getName());
+                }
+            }
+        }
+        
+           
+            
+        
         
         buildLogsTable(door.getLog());
         
@@ -1252,7 +1226,112 @@ public class MainWindow extends javax.swing.JFrame {
         doors_button_edit.setEnabled(true);
         doors_button_delete.setEnabled(true);
         doors_table_log.setEnabled(true);
-    }//GEN-LAST:event_MouseClicked_doors_table
+    }//GEN-LAST:event_doors_table_displayMouseClicked
+
+    private void doors_button_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_addActionPerformed
+        // TODO add your handling code here:
+        resetDoorFields();   
+        int row = doors_table_display.getSelectedRow();
+
+        setGroupEnabled(true, doorsGroup);
+        
+        doors_button_add.setEnabled(false);
+        doors_button_edit.setEnabled(false);
+        doors_button_delete.setEnabled(false);
+        
+        doors_panel_elements.setVisible(true);
+        
+        currentDoor = null;
+        
+        
+    }//GEN-LAST:event_doors_button_addActionPerformed
+
+    private void doors_button_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_saveActionPerformed
+        // TODO add your handling code here:
+        // Get values from all the schedule form fields
+        String name = doors_textField_name.getText();
+        String StatusString = doors_label_statusState.getText();
+        TreeSet<LogEntry> log = new TreeSet<LogEntry>();
+        Location location = new Location(0,0);
+        Schedule[] weeklySchedules = new Schedule[7];
+        
+        weeklySchedules[0] = schedules.get(doors_comboBox_monday.getSelectedItem());
+        weeklySchedules[1] = schedules.get(doors_comboBox_tuesday.getSelectedItem());
+        weeklySchedules[2] = schedules.get(doors_comboBox_wednesday.getSelectedItem());
+        weeklySchedules[3] = schedules.get(doors_comboBox_thursday.getSelectedItem());
+        weeklySchedules[4] = schedules.get(doors_comboBox_friday.getSelectedItem());
+        weeklySchedules[5] = schedules.get(doors_comboBox_saturday.getSelectedItem());
+        weeklySchedules[6] = schedules.get(doors_comboBox_sunday.getSelectedItem());
+        String buildingNum = null;
+        if(doors_radioButton_b1.isSelected())
+        {
+            buildingNum = ""+1;
+        }
+        else if(doors_radioButton_b2.isSelected())
+        {
+            buildingNum = ""+2;
+        }
+        else if(doors_radioButton_b3.isSelected())
+        {
+            buildingNum = ""+3;
+        }
+        boolean status = false;
+        if(StatusString.equals("true")){
+            status = true;
+        }
+        if (name.isBlank() ||(!doors_radioButton_b1.isSelected() && !doors_radioButton_b2.isSelected() && !doors_radioButton_b3.isSelected() )) {
+            JOptionPane.showMessageDialog(MainWindow.this, "ERROR: All doors fields must have data.");
+            return;
+        }
+        Door door = new Door(name, location, log,weeklySchedules, status, buildingNum);
+
+        if(door.isStatus()){
+            doors_label_statusState.setText("OPEN");
+            status = door.isStatus();
+        }
+        else{
+            doors_label_statusState.setText("CLOSE");
+            status = door.isStatus();
+        }
+        door.setStatus(status);
+        // Determine edit/add function and duplicate names
+        // Edit button enabled, check to see if name changed.  If so, then delete the onld schedule, and add new.
+        // if name the same, replace the schedule n the map.
+        
+        if (currentDoor != null) {
+            
+            if (name.equals(currentDoor.getName())) {
+                doors.put(name, door);
+            } else {
+                doors.put(name, door);
+            }    
+            
+        } else {
+        
+        // If schedule is null, then add was selected.  Before adding, make sure
+        // there is not already a schedule in the map with the same name.
+        // If there is, alert and ask user to choose a diferent name.
+            
+            if (doors.containsKey(name)) {
+                
+                JOptionPane.showMessageDialog(MainWindow.this, "ERROR: Schedule exists with the same name. Please choose another name");
+                return;
+                
+            } 
+        
+        }
+        
+        doors.put(name, door);
+        buildDoorsTable();
+        
+        resetScheduleFields();
+        setGroupEnabled(false, schedulesGroup);
+        schedules_button_add.setEnabled(true);
+        schedules_panel_elements.setVisible(false);
+        
+        
+                                        
+    }//GEN-LAST:event_doors_button_saveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1297,11 +1376,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JButton doors_button_delete;
     private javax.swing.JButton doors_button_edit;
     private javax.swing.JButton doors_button_location;
-    private javax.swing.JButton doors_button_locationCancel;
-    private javax.swing.JButton doors_button_locationSave;
     private javax.swing.JButton doors_button_save;
-    private javax.swing.JComboBox<String> doors_comboBox_Xselector;
-    private javax.swing.JComboBox<String> doors_comboBox_Yselector;
     private javax.swing.JComboBox<String> doors_comboBox_friday;
     private javax.swing.JComboBox<String> doors_comboBox_monday;
     private javax.swing.JComboBox<String> doors_comboBox_saturday;
@@ -1309,10 +1384,8 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> doors_comboBox_thursday;
     private javax.swing.JComboBox<String> doors_comboBox_tuesday;
     private javax.swing.JComboBox<String> doors_comboBox_wednesday;
-    private javax.swing.JDialog doors_dialog_location;
     private javax.swing.JLabel doors_label_building;
     private javax.swing.JLabel doors_label_location;
-    private javax.swing.JLabel doors_label_locationInstractions;
     private javax.swing.JLabel doors_label_log;
     private javax.swing.JLabel doors_label_monday;
     private javax.swing.JLabel doors_label_name;
@@ -1324,8 +1397,6 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel doors_label_thursday;
     private javax.swing.JLabel doors_label_tuesday;
     private javax.swing.JLabel doors_label_wednesday;
-    private javax.swing.JLabel doors_label_x;
-    private javax.swing.JLabel doors_label_y;
     private javax.swing.JLabel doors_lable_friday;
     private javax.swing.JPanel doors_panel_crudButtons;
     private javax.swing.JPanel doors_panel_elements;
@@ -1452,48 +1523,6 @@ public class MainWindow extends javax.swing.JFrame {
         CellColorRenderer cellRenderer = new CellColorRenderer();
         schedules_table_display.setDefaultRenderer(Object.class, cellRenderer);
         
-        /* Update the Color cell with the correct color for the schedule
-        for (int i=0; i<schedules.size(); i++) {
-            Schedule schedule = schedules.get((String)schedules_table_display.getValueAt(i, 0));
-            TableCellEditor editor = schedules_table_display.getCellEditor(i, 3);
-           
-            //JLabel cell = (JLabel)component;
-            //cell.setBackground(schedule.getColor());
-        }
-       */ 
-
-    }
-    private void buildDoorsTable() {
-        
-        Object[][] data = new Object[doors.size()][5];
-        String[] columnHeaders = {"Name", "Status", "Color", "Schedule", "Building"};
-     
-        // Get the Tables Cell renderer to change the background color of the 
-        // schedule field to match the color
-        
-        int row = 0;
-        
-        for (String key : doors.keySet()) {
-            Door door = doors.get(key);
-            
-            data[row][0] = door.getName();
-            data[row][1] = door.isStatus();
-            
-            Color color  = door.getColor();
-            data[row][2] = String.format("%d, %d, %d",color.getRed(), color.getGreen(), color.getBlue());
-            data[row][3] = door.getTimes();
-            data[row][4] = door.getBuilding();
-            
-            row++;
-            
-        }
-        
-        DefaultTableModel dfm = (DefaultTableModel)doors_table_display.getModel();
-        dfm.setDataVector(data, columnHeaders);
-        
-        CellColorRenderer cellRenderer = new CellColorRenderer();
-        doors_table_display.setDefaultRenderer(Object.class, cellRenderer);
-        
 
 
     }
@@ -1543,7 +1572,7 @@ public class MainWindow extends javax.swing.JFrame {
         schedulesGroup[11] = schedules_button_add;
         
     }
-    
+
     private void buildDoorsGroup() {
                 doorsGroup = new JComponent[17];
 
@@ -1595,6 +1624,66 @@ public class MainWindow extends javax.swing.JFrame {
         timesModel.setRowCount(0);
         
     }
+    private void resetDoorFields(){
+        doors_textField_name.setText("");
+        doors_label_statusState.setText("");
+        
+doors_buttonGroup_building.clearSelection();        
+doors_comboBox_monday.setSelectedIndex(0);
+        doors_comboBox_tuesday.setSelectedIndex(0);
+        doors_comboBox_wednesday.setSelectedIndex(0);
+        doors_comboBox_thursday.setSelectedIndex(0);
+        doors_comboBox_friday.setSelectedIndex(0);
+        doors_comboBox_saturday.setSelectedIndex(0);
+        doors_comboBox_sunday.setSelectedIndex(0);
+        DefaultTableModel dfm = (DefaultTableModel)doors_table_log.getModel();
+        dfm.setRowCount(0);
+
+
+    }
+    private void buildDoorsTable() {
+        
+        Object[][] data = new Object[doors.size()][5];
+        String[] columnHeaders = {"Name", "Status", "Color", "Schedule", "Building"};
+     
+        // Get the Tables Cell renderer to change the background color of the 
+        // schedule field to match the color
+        
+        int row = 0;
+        for (String key : doors.keySet()) {
+            Door door = doors.get(key);
+            
+            data[row][0] = door.getName();
+            if(door.isStatus())
+            {
+                            data[row][1] = "OPEN";
+
+            }
+            else
+            {
+                            data[row][1] = "CLOSE";
+
+            }
+            
+            Color color  = door.getToday().getColor();
+            data[row][2] = String.format("%d, %d, %d",color.getRed(), color.getGreen(), color.getBlue());
+            data[row][3] = door.getToday().getTimes();
+            data[row][4] = door.getBuilding();
+            
+            row++;
+            System.out.println(door.getToday().getName());
+
+        }
+        
+        DefaultTableModel dfm = (DefaultTableModel)doors_table_display.getModel();
+        dfm.setDataVector(data, columnHeaders);
+        
+        CellColorRenderer cellRenderer = new CellColorRenderer();
+        doors_table_display.setDefaultRenderer(Object.class, cellRenderer);
+        
+
+
+    }
     private void buildLogsTable(TreeSet<LogEntry> logs) {
 
         if (logs == null || logs.size() == 0) {
@@ -1629,5 +1718,5 @@ public class MainWindow extends javax.swing.JFrame {
         dfm.setDataVector(data, columnHeaders);
     
     }
-  
+         
 }

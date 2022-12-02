@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.TreeMap;
@@ -60,6 +61,25 @@ public class Door implements Serializable{
     }
 
     public boolean isStatus() {
+        LocalDate localDate = LocalDate.now();
+        DayOfWeek dayWeek = localDate.getDayOfWeek();
+        int dayOfWeek = dayWeek.getValue()-1;
+        Schedule schedule = weeklySchedules[dayOfWeek];
+        
+        LocalDateTime localTime = LocalDateTime.now();
+        int hourNow = localTime.getHour();
+        int minNow = localTime.getMinute();
+        GregorianCalendar timeNow  = new GregorianCalendar(2022, 9, 4, hourNow, minNow);
+        ArrayList<DoorTime> Times = new ArrayList<DoorTime>(schedule.getTimes());
+        for(DoorTime timeCheck: Times){
+            GregorianCalendar openTime = timeCheck.getOpen();
+            GregorianCalendar closeTime = timeCheck.getClose();
+
+            if (timeNow.after(openTime) && timeNow.before(closeTime)){
+                status = true;
+            }
+            
+        }
         return status;
     }
 
@@ -89,17 +109,11 @@ public class Door implements Serializable{
     {
         return weeklySchedules[day];
     }
-    public ArrayList<DoorTime> getTimes(){
-        
-        return getToday().getTimes();
-        
-    }
-    public Color getColor() {
-
-        return getToday().getColor();
-    }
+            
     
-
+    
+         
+    
     @Override
     public String toString() {
         
