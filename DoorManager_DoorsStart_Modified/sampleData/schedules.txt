@@ -1,9 +1,0 @@
-Name	Color	Description	Monday
-Robotics	GRAY	Schedule specific to the Robotics program that opens doors before school starting at 7 : 00 am after school until either 5 : 30 pm or 8 : 00 pm	0700:0815,1535:2000
-Interior Doors	YELLOW	The doors located inside the VHS courtyard that are open at all times during the school day.	0700:1600
-Delayed Start	PINK	Schedule for school when school is delayed for any reason. School will always be delayed by 2 hours unless stated otherwise by LISD. Some reasons for delay are include snow or other severe weather.	0945:1015,1121:1128,1234:1240,1310:1316,1346:1352,1422:1429,1535:1615
-Early Release	ORANGE	Schedule specific to the half day/early release bell schedule when school starts at the same time but ends significantly earlier.	0745:0815,0910:0917,1012:1019,1114:1121,1215:1245
-EOD PIT	BLUE	Schedule to allow passage between buildings during passing periods that is adjusted to EOD PIT schedule times	0745:0815,0940:0947,1112:1119,1149:1156,1244:1251,1321:1328,1453:1500
-Regular	PURPLE	Schedule times for a regular/normal day schedule.	0745:0820,1154:1403,1535:1600
-Special Events	RED	Special evens such as Volleyball games, that unlock the gym doors to make accesing games such as volleyball and basketball possible	1600:2000
-NONE	GREEN	The door is not scheduled to open at any time during the day	0000:0000
