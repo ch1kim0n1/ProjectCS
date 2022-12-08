@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,11 +46,14 @@ public class MainWindow extends javax.swing.JFrame {
     private ArrayList<DoorTime>         editedTimes;       // Serves as a temp variable for when schedule times are edited 
     private int                         editedTimeRow;
     private JComboBox[]                 doorComboBox;
+    private String                      currentFile;    //the save location for the program
     
     public MainWindow() {
         
-        DataFactory df = new DataFactory();
-        writeModel(df.getModel());
+        currentFile = getCurrentFileLocation();
+        
+       //DataFactory df = new DataFactory();
+       //writeModel(df.getModel());
 
         DoorManagerModel model = readModel();
         doors = model.doors;
@@ -61,8 +65,8 @@ public class MainWindow extends javax.swing.JFrame {
         buildDoorComboBoxGroup();
         
         buildSchedulesGroup();
-        buildDoorsGroup();
         buildSchedulesTable();
+        buildDoorsGroup();
         buildDoorsTable();
         
         buildComboBoxes();
@@ -933,6 +937,7 @@ public class MainWindow extends javax.swing.JFrame {
         currentSchedule = null;
         
         buildComboBoxes();
+        writeModel(new DoorManagerModel(doors, schedules, badges));
            
     }//GEN-LAST:event_schedules_button_deleteActionPerformed
 
@@ -1065,6 +1070,7 @@ public class MainWindow extends javax.swing.JFrame {
         schedules_panel_elements.setVisible(false);
         
         buildComboBoxes();
+        writeModel(new DoorManagerModel(doors, schedules, badges));
         
     }//GEN-LAST:event_schedules_button_saveActionPerformed
 
@@ -1356,22 +1362,51 @@ public class MainWindow extends javax.swing.JFrame {
         schedules_button_add.setEnabled(true);
         schedules_panel_elements.setVisible(false);
         
-        
+         // Step 3 - Rebuild the schedules display table
+        buildDoorsTable();
+
+        // Step 5 - Clear the fields
+        resetDoorFields();
+        setGroupEnabled(false, doorsGroup);
                                         
     }//GEN-LAST:event_doors_button_saveActionPerformed
 
     private void doors_button_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_deleteActionPerformed
-        // TODO add your handling code here:
+         // Step 1 - Get the selected schedule name from the talbe
+        int row = doors_table_display.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)doors_table_display.getModel();
+        String name = (String) model.getValueAt(row,0);
+        
+        // Confirm schedule deletion.  If JOptionPane returns false, return out of the method.
+        int confirmation = JOptionPane.showConfirmDialog(null, "CONFIRM: Delete this door: " + name + "?");
+        
+        if (confirmation != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Step 2 - Delete the schedule from the schedules HashMap
+        doors.remove(name);
+        
+        // Step 3 - Rebuild the schedules display table
+        buildDoorsTable();
+
+        // Step 5 - Clear the fields
+        resetDoorFields();
     }//GEN-LAST:event_doors_button_deleteActionPerformed
 
     private void doors_button_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_editActionPerformed
+           
+        if (doors_textField_name.getText().isEmpty()) {
+            return;
+        }
+        
         setGroupEnabled(true, doorComboBox);
         doors_textField_name.setEnabled(true);
         doors_radioButton_b1.setEnabled(true);
         doors_radioButton_b2.setEnabled(true);              //BUG: editing when boxes are empty
         doors_radioButton_b3.setEnabled(true);
         doors_button_location.setEnabled(true);
-        
+
         doors_button_add.setEnabled(false);
         doors_button_delete.setEnabled(false);
         doors_button_edit.setEnabled(false);
@@ -1518,7 +1553,7 @@ public class MainWindow extends javax.swing.JFrame {
        
         try {
             
-            FileOutputStream    fos = new FileOutputStream(new File("model.dms"));
+            FileOutputStream    fos = new FileOutputStream(new File(currentFile));
             ObjectOutputStream  oos = new ObjectOutputStream(fos);
             
             oos.writeObject(model);
@@ -1538,7 +1573,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         try {
             
-            FileInputStream     fis = new FileInputStream(new File("model.dms"));
+            FileInputStream     fis = new FileInputStream(new File(currentFile));
             ObjectInputStream   ois = new ObjectInputStream(fis);
             
             dmm = (DoorManagerModel)ois.readObject();
@@ -1768,6 +1803,8 @@ doors_comboBox_monday.setSelectedIndex(0);
             
             String name = id + " - " + badges.get(id).getName();
             name = name.substring(1, name.length()-1);
+            name = name.substring(0,8) + name.substring(9);
+            //name = name.substring(8,9);
             data[row][1] = name; 
             
             
@@ -1813,6 +1850,21 @@ doors_comboBox_monday.setSelectedIndex(0);
         for(JComboBox comboBox : doorComboBox){
             comboBox.setModel(new DefaultComboBoxModel(scheduleNames));
         }
+    }
+
+    private String getCurrentFileLocation() {
+        
+        try
+        {
+        Scanner file = new Scanner(new File("preferences.txt"));
+        return file.nextLine();
+        }
+        
+        catch(FileNotFoundException ex)
+        {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
          
 }
