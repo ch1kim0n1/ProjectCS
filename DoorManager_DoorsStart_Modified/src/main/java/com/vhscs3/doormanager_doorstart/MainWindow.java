@@ -9,13 +9,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -26,6 +25,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -167,6 +167,11 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menu_file = new javax.swing.JMenu();
+        fileMenu_item_new = new javax.swing.JMenuItem();
+        fileMenu_item_open = new javax.swing.JMenuItem();
+        fileMenu_item_saveAs = new javax.swing.JMenuItem();
+        fileMenu_item_close = new javax.swing.JMenuItem();
+        fileMenu_item_loadSampleData = new javax.swing.JMenuItem();
         menu_edit = new javax.swing.JMenu();
 
         schedules_dialog_times.setMinimumSize(new java.awt.Dimension(400, 300));
@@ -828,6 +833,47 @@ public class MainWindow extends javax.swing.JFrame {
         tabbedPane.addTab("Schedules", schedules_tabbedPanel);
 
         menu_file.setText("File");
+
+        fileMenu_item_new.setText("New");
+        fileMenu_item_new.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_item_newActionPerformed(evt);
+            }
+        });
+        menu_file.add(fileMenu_item_new);
+
+        fileMenu_item_open.setText("Open");
+        fileMenu_item_open.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_item_openActionPerformed(evt);
+            }
+        });
+        menu_file.add(fileMenu_item_open);
+
+        fileMenu_item_saveAs.setText("Save As");
+        fileMenu_item_saveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_item_saveAsActionPerformed(evt);
+            }
+        });
+        menu_file.add(fileMenu_item_saveAs);
+
+        fileMenu_item_close.setText("Close");
+        fileMenu_item_close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_item_closeActionPerformed(evt);
+            }
+        });
+        menu_file.add(fileMenu_item_close);
+
+        fileMenu_item_loadSampleData.setText("Load Sample Data");
+        fileMenu_item_loadSampleData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileMenu_item_loadSampleDataActionPerformed(evt);
+            }
+        });
+        menu_file.add(fileMenu_item_loadSampleData);
+
         menuBar.add(menu_file);
 
         menu_edit.setText("Edit");
@@ -898,6 +944,7 @@ public class MainWindow extends javax.swing.JFrame {
         schedules_label_colorDisplay.setOpaque(true);
         
         buildTimesTable(schedule.getTimes());
+        
         
         setGroupEnabled(false, schedulesGroup);
         schedules_button_add.setEnabled(true);
@@ -1161,6 +1208,7 @@ public class MainWindow extends javax.swing.JFrame {
         if (doors_button_cancel.isEnabled()) {
             return;
         }
+        resetDoorFields();
         
         int row = doors_table_display.getSelectedRow();
         
@@ -1170,12 +1218,11 @@ public class MainWindow extends javax.swing.JFrame {
         currentDoor = door;
         
         doors_textField_name.setText(name);
-        if(((String)doors_table_display.getValueAt(row, 2)).equals("true")){
+        if(door.isStatus()){
             doors_label_statusState.setText("OPEN");
         }
         else{
             doors_label_statusState.setText("CLOSE");
- 
         }
             
         int buildingNum = Integer.parseInt((String)doors_table_display.getValueAt(row, 4));
@@ -1331,31 +1378,33 @@ public class MainWindow extends javax.swing.JFrame {
         // Edit button enabled, check to see if name changed.  If so, then delete the onld schedule, and add new.
         // if name the same, replace the schedule n the map.
         
-        if (currentDoor != null) {
-            
-            if (name.equals(currentDoor.getName())) {
-                doors.put(name, door);
-            } else {
-                doors.put(name, door);
-            }    
-            
-        } else {
+        int row2 = doors_table_display.getSelectedRow();
+        String name3  = (String) doors_table_display.getValueAt(row2, 0);
         
-        // If schedule is null, then add was selected.  Before adding, make sure
-        // there is not already a schedule in the map with the same name.
-        // If there is, alert and ask user to choose a diferent name.
-            
-            if (doors.containsKey(name)) {
-                
-                JOptionPane.showMessageDialog(MainWindow.this, "ERROR: Schedule exists with the same name. Please choose another name");
+        if(!name3.equals(doors_textField_name.getText())){
+            int confirmation = JOptionPane.showConfirmDialog(null, "CONFIRM: Replace this door?");
+        
+            if (confirmation != JOptionPane.YES_OPTION) {
                 return;
+             }
+            else{
+                int row = doors_table_display.getSelectedRow();
+                DefaultTableModel model = (DefaultTableModel)doors_table_display.getModel();
+                String name2 = (String) model.getValueAt(row,0);
                 
-            } 
-        
+                doors.remove(name2);
+                doors.put(name, door);
+            }
         }
         
+        //test
+        int row = doors_table_display.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)doors_table_display.getModel();
+        String name2 = (String) model.getValueAt(row,0);
+
+        doors.remove(name2);
         doors.put(name, door);
-        buildDoorsTable();
+        //test
         
         resetScheduleFields();
         setGroupEnabled(false, schedulesGroup);
@@ -1364,10 +1413,14 @@ public class MainWindow extends javax.swing.JFrame {
         
          // Step 3 - Rebuild the schedules display table
         buildDoorsTable();
+        buildLogsTable(door.getLog());
 
         // Step 5 - Clear the fields
         resetDoorFields();
         setGroupEnabled(false, doorsGroup);
+        
+        buildComboBoxes();
+        writeModel(new DoorManagerModel(doors, schedules, badges));
                                         
     }//GEN-LAST:event_doors_button_saveActionPerformed
 
@@ -1429,6 +1482,36 @@ public class MainWindow extends javax.swing.JFrame {
         doors_button_cancel.setEnabled(false);
         doors_button_save.setEnabled(false);
     }//GEN-LAST:event_doors_button_cancelActionPerformed
+
+    private void fileMenu_item_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_item_newActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileMenu_item_newActionPerformed
+
+    private void fileMenu_item_saveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_item_saveAsActionPerformed
+        //use a JFileChooser to select a sae location or name for the new file
+        //the file will be assigned to the CurrentFile instance variable and used to save the file.
+        //the file name will also be writtten to the prefferences.txt file so that it will open
+        //when ht program is launched.
+        
+        JFileChooser jfc = new JFileChooser();
+        if(jfc.showSaveDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION){
+            currentFile = jfc.getSelectedFile().getAbsolutePath();
+            writeModel(new DoorManagerModel(doors, schedules, badges));
+            writeCurrentFileLocaitonToPreferences();
+        }
+    }//GEN-LAST:event_fileMenu_item_saveAsActionPerformed
+
+    private void fileMenu_item_openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_item_openActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileMenu_item_openActionPerformed
+
+    private void fileMenu_item_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_item_closeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileMenu_item_closeActionPerformed
+
+    private void fileMenu_item_loadSampleDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenu_item_loadSampleDataActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fileMenu_item_loadSampleDataActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1506,6 +1589,11 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JTable doors_table_display;
     private javax.swing.JTable doors_table_log;
     private javax.swing.JTextField doors_textField_name;
+    private javax.swing.JMenuItem fileMenu_item_close;
+    private javax.swing.JMenuItem fileMenu_item_loadSampleData;
+    private javax.swing.JMenuItem fileMenu_item_new;
+    private javax.swing.JMenuItem fileMenu_item_open;
+    private javax.swing.JMenuItem fileMenu_item_saveAs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu menu_edit;
@@ -1865,6 +1953,18 @@ doors_comboBox_monday.setSelectedIndex(0);
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private void writeCurrentFileLocaitonToPreferences() {
+        try{
+            FileWriter writer = new FileWriter("preferences.txt");
+            writer.write(currentFile);
+            writer.close();
+        }
+        catch(IOException ex){
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
          
 }

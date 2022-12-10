@@ -61,6 +61,7 @@ public class Door implements Serializable{
     }
 
     public boolean isStatus() {
+        status = false;
         LocalDate localDate = LocalDate.now();
         DayOfWeek dayWeek = localDate.getDayOfWeek();
         int dayOfWeek = dayWeek.getValue()-1;
