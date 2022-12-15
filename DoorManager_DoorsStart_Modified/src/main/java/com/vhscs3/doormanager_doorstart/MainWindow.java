@@ -76,6 +76,9 @@ public class MainWindow extends javax.swing.JFrame {
 
         schedules_button_add.setEnabled(true);
         
+        doors_panel_elements.setVisible(false);
+        doors_table_log.setVisible(true);
+        
         schedules_panel_elements.setVisible(false);
                 doors_button_add.setEnabled(true);
 
@@ -1216,6 +1219,8 @@ public class MainWindow extends javax.swing.JFrame {
         String name  = (String) doors_table_display.getValueAt(row, 0);
         Door door = doors.get(name);
         
+        
+        
         currentDoor = door;
         
         doors_textField_name.setText(name);
@@ -1264,19 +1269,19 @@ public class MainWindow extends javax.swing.JFrame {
         buildLogsTable(door.getLog());
         
         setGroupEnabled(false, doorsGroup);
+        doors_panel_elements.setVisible(false);
         doors_button_add.setEnabled(true);
         doors_button_edit.setEnabled(true);
         doors_button_delete.setEnabled(true);
         doors_table_log.setEnabled(true);
-        doors_panel_elements.setVisible(true);
-        doors_scrollPane_log.setVisible(true);
-                doors_label_log.setVisible(true);
     }//GEN-LAST:event_doors_table_displayMouseClicked
 
     private void doors_button_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_addActionPerformed
         // TODO add your handling code here:
         resetDoorFields();   
         int row = doors_table_display.getSelectedRow();
+        
+        doors_panel_elements.setVisible(true);
 
         setGroupEnabled(true, doorsGroup);
         
@@ -1293,8 +1298,9 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void doors_button_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_saveActionPerformed
                // Get values from all the schedule form fields
+        doors_panel_elements.setVisible(false);
         String name = doors_textField_name.getText();
-        TreeSet<LogEntry> log = new TreeSet<LogEntry>(currentDoor.getLog());
+        TreeSet<LogEntry> log = new TreeSet<LogEntry>();
         
         Location location = new Location(0,0);
         Schedule[] weeklySchedules = new Schedule[7];
@@ -1303,6 +1309,10 @@ public class MainWindow extends javax.swing.JFrame {
             weeklySchedules[i] = schedules.get(doorComboBox[i].getSelectedItem());
         } 
             
+        if (name.isBlank()) {
+            JOptionPane.showMessageDialog(MainWindow.this, "ERROR: All doors fields must have data.");
+            return;
+        }
             
         String buildingNum = null;
         if(doors_radioButton_b1.isSelected())
@@ -1339,6 +1349,10 @@ public class MainWindow extends javax.swing.JFrame {
         // if name the same, replace the schedule n the map.
         
         if (currentDoor != null) {
+            if(currentDoor.getLog().size()>0){
+               log = (TreeSet<LogEntry>) currentDoor.getLog().clone();
+               door.setLog(log);
+            }
             
             if (name.equals(currentDoor.getName())) {
                 doors.put(name, door);
@@ -1361,6 +1375,7 @@ public class MainWindow extends javax.swing.JFrame {
         
         }
         
+        
         doors.put(name, door);
         buildDoorsTable();
 
@@ -1369,9 +1384,7 @@ public class MainWindow extends javax.swing.JFrame {
         doors_button_add.setEnabled(true);
         doors_panel_elements.setVisible(false);
      
-        doors_scrollPane_log.setVisible(false);
-                doors_label_log.setVisible(false);
-                        writeModel(new DoorManagerModel(doors, schedules, badges));
+        writeModel(new DoorManagerModel(doors, schedules, badges));
                                         
     }//GEN-LAST:event_doors_button_saveActionPerformed
 
@@ -1396,6 +1409,14 @@ public class MainWindow extends javax.swing.JFrame {
 
         // Step 5 - Clear the fields
         resetDoorFields();
+        
+        currentDoor = null;
+        
+        doors_button_add.setEnabled(true);
+        doors_button_delete.setEnabled(false);
+        doors_button_edit.setEnabled(false);
+        doors_button_cancel.setEnabled(false);
+        doors_button_save.setEnabled(false);
     }//GEN-LAST:event_doors_button_deleteActionPerformed
 
     private void doors_button_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_editActionPerformed
@@ -1416,10 +1437,13 @@ public class MainWindow extends javax.swing.JFrame {
         doors_button_edit.setEnabled(false);
         doors_button_cancel.setEnabled(true);
         doors_button_save.setEnabled(true);
+        
+        doors_panel_elements.setVisible(true);
     }//GEN-LAST:event_doors_button_editActionPerformed
 
     private void doors_button_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doors_button_cancelActionPerformed
         resetDoorFields();
+        doors_panel_elements.setVisible(false);
         setGroupEnabled(false, doorComboBox);
         doors_textField_name.setEnabled(false);
         doors_radioButton_b1.setEnabled(false);
@@ -1428,8 +1452,8 @@ public class MainWindow extends javax.swing.JFrame {
         doors_button_location.setEnabled(false);
         
         doors_button_add.setEnabled(true);
-        doors_button_delete.setEnabled(true);
-        doors_button_edit.setEnabled(true);
+        doors_button_delete.setEnabled(false);
+        doors_button_edit.setEnabled(false);
         doors_button_cancel.setEnabled(false);
         doors_button_save.setEnabled(false);
     }//GEN-LAST:event_doors_button_cancelActionPerformed
